@@ -37,6 +37,12 @@ azure-ip-masq-agent-rjvbd                    1/1     Running            0       
 kubectl get pods -n kube-system
 kubectl -n kube-system logs -f $(kubectl get po -n kube-system | egrep -o 'aci-connector-linux-[A-Za-z0-9-]+')
 ```
+
+or 
+```
+kc -n kube-system logs -f aci-connector-linux-8674dc8685-5q896
+```
+
 ### Step-02-02: Fix ACI Connector CrashLoopBackOff Issue
 - Go to Services -> Managed Identities -> aciconnectorlinux-aksprod1 
 - Azure Role Assignments
@@ -93,6 +99,30 @@ az aks nodepool add --resource-group ${AKS_RESOURCE_GROUP} \
                     --zones {1,2,3}
 
 ```
+# problem with vCPU quotas on the free tier, Standard_DS2_v2 requires 2 cpu for the linux101, for the win101(Standard_DS2_v2) it would be another 2 vCPU
+# which would result in exceeding the quotas of 4 vCPU in the free tier. Found alternative sizes here (https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series)
+# note: azure aks restrict usage of some vm sizes (https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#restricted-vm-sizes)
+use new vm size Standard_D1_v2  => takes 1 vCPU
+
+```
+# Create New Linux Node Pool 
+az aks nodepool add --resource-group ${AKS_RESOURCE_GROUP} \
+                    --cluster-name ${AKS_CLUSTER} \
+                    --name linux101 \
+                    --node-count 1 \
+                    --enable-cluster-autoscaler \
+                    --max-count 5 \
+                    --min-count 1 \
+                    --mode User \
+                    --node-vm-size Standard_D1_v2 \
+                    --os-type Linux \
+                    --labels nodepool-type=user environment=production nodepoolos=linux app=java-apps \
+                    --tags nodepool-type=user environment=production nodepoolos=linux app=java-apps \
+                    --zones {1,2,3}
+
+```
+
+
 ### Step-03-02: List Node Pools & Nodes
 ```
 # List Node Pools
@@ -130,6 +160,25 @@ az aks nodepool add --resource-group ${AKS_RESOURCE_GROUP} \
                     --tags environment=production nodepoolos=windows app=dotnet-apps nodepool-type=user \
                     --zones {1,2,3}
 ```
+
+# alternative command for Azure Free Tier; smaller vm size with only 1 vCPU
+```
+# Create New Windows Node Pool 
+az aks nodepool add --resource-group ${AKS_RESOURCE_GROUP} \
+                    --cluster-name ${AKS_CLUSTER} \
+                    --os-type Windows \
+                    --name win101 \
+                    --node-count 1 \
+                    --enable-cluster-autoscaler \
+                    --max-count 5 \
+                    --min-count 1 \
+                    --mode User \
+                    --node-vm-size Standard_D1_v2 \
+                    --labels environment=production nodepoolos=windows app=dotnet-apps nodepool-type=user \
+                    --tags environment=production nodepoolos=windows app=dotnet-apps nodepool-type=user \
+                    --zones {1,2,3}
+```
+
 ### Step-04-02: List Node Pools & Nodes
 ```
 # List Node Pools

@@ -83,7 +83,7 @@ docker stop acr-app2
 ### Build, Test Locally, Tag and Push to ACR
 ```
 # Export Command
-export ACR_REGISTRY=acrdemo2ss.azurecr.io
+export ACR_REGISTRY=acrdemo1ss.azurecr.io
 export ACR_NAMESPACE=app2
 export ACR_IMAGE_NAME=acr-app2
 export ACR_IMAGE_TAG=v1
@@ -150,11 +150,11 @@ kubectl create secret docker-registry <secret-name> \
     --docker-password=<service-principal-password>
 
 # Replace
-kubectl create secret docker-registry acrdemo2ss-secret \
+kubectl create secret docker-registry acrdemo1ss-secret \
     --namespace default \
     --docker-server=acrdemo2ss.azurecr.io \
-    --docker-username=80beacfe-7176-4ff5-ad22-dbb15528a9a8 \
-    --docker-password=0zjUzGzSx3_.xi1SC40VcWkdVyl8Ml8QNj    
+    --docker-username=59de05b9-fcd7-4235-a89a-e6ab9ecee02b \
+    --docker-password=Biua4_OnON6Agds2H.AL_u9MSamIOQc-c.
 
 # List Secrets
 kubectl get secrets    

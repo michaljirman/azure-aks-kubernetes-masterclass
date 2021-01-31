@@ -33,7 +33,7 @@ az role assignment create \
 # Create AKS ReadOnly User in Azure AD
 AKS_READONLY_USER_OBJECT_ID=$(az ad user create \
   --display-name "AKS READ1" \
-  --user-principal-name aksread1@stacksimplifygmail.onmicrosoft.com \
+  --user-principal-name aksread1@jirmanmichalgmail.onmicrosoft.com \
   --password @AKSDemo123 \
   --query objectId -o tsv)
 echo $AKS_READONLY_USER_OBJECT_ID
@@ -44,7 +44,7 @@ az ad group member add --group aksreadonly --member-id $AKS_READONLY_USER_OBJECT
 
 ## Step-03: Test aksreadonly User Authentication to Portal
 - URL: https://portal.azure.com
-- Username: aksread1@stacksimplifygmail.onmicrosoft.com
+- Username: aksread1@jirmanmichalgmail.onmicrosoft.com
 - Password: @AKSDemo123
 
 

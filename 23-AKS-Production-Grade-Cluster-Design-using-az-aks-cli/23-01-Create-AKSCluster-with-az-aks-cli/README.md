@@ -82,7 +82,7 @@ echo $AKS_AD_AKSADMIN_GROUP_ID
 # Replace with your AD Domain - aksadmin1@stacksimplifygmail.onmicrosoft.com
 AKS_AD_AKSADMIN1_USER_OBJECT_ID=$(az ad user create \
   --display-name "AKS Admin1" \
-  --user-principal-name aksadmin1@stacksimplifygmail.onmicrosoft.com \
+  --user-principal-name aksadmin1@jirmanmichalgmail.onmicrosoft.com \
   --password @AKSDemo123 \
   --query objectId -o tsv)
 echo $AKS_AD_AKSADMIN1_USER_OBJECT_ID
@@ -91,7 +91,7 @@ echo $AKS_AD_AKSADMIN1_USER_OBJECT_ID
 az ad group member add --group aksadmins --member-id $AKS_AD_AKSADMIN1_USER_OBJECT_ID
 
 # Make a note of Username and Password
-Username: aksadmin1@stacksimplifygmail.onmicrosoft.com
+Username: aksadmin1@jirmanmichalgmail.onmicrosoft.com
 Password: @AKSDemo123
 ```
 
@@ -121,13 +121,18 @@ echo $AKS_SSH_KEY_LOCATION
 ## Step-05: Pre-requisite-5: Create Log Analytics Workspace
 ```
 # Create Log Analytics Workspace
-AKS_MONITORING_LOG_ANALYTICS_WORKSPACE_ID=$(az monitor log-analytics workspace create               --resource-group ${AKS_RESOURCE_GROUP} \
+AKS_MONITORING_LOG_ANALYTICS_WORKSPACE_ID=$(az monitor log-analytics workspace create --resource-group ${AKS_RESOURCE_GROUP} \
                                            --workspace-name aksprod-loganalytics-workspace1 \
                                            --query id \
                                            -o tsv)
 
 echo $AKS_MONITORING_LOG_ANALYTICS_WORKSPACE_ID
 ```
+### issue here with createing log analytic workspace - `workspace name is not unique`. changed workspace name to something else
+AKS_MONITORING_LOG_ANALYTICS_WORKSPACE_ID=$(az monitor log-analytics workspace create --resource-group ${AKS_RESOURCE_GROUP} \
+                                           --workspace-name aksprod-loganalytics-workspace-aksprod \
+                                           --query id \
+                                           -o tsv)
 
 
 ## Step-06: Pre-requisite-5: Get Azure AD Tenant ID and Set Windows Username Passwords
@@ -144,7 +149,7 @@ Go to Services -> Azure Active Directory -> Properties -> Tenant ID
 
 # Set Windows Server/Node Username & Password
 AKS_WINDOWS_NODE_USERNAME=azureuser
-AKS_WINDOWS_NODE_PASSWORD="P@ssw0rd1234"
+AKS_WINDOWS_NODE_PASSWORD="P@ssw0rd123456789"
 echo $AKS_WINDOWS_NODE_USERNAME, $AKS_WINDOWS_NODE_PASSWORD
 ```
 

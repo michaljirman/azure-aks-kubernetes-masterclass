@@ -29,6 +29,16 @@ az aks create --resource-group ${RESOURCE_GROUP} \
               --min-count 1 \
               --max-count 5 
 
+# OR use existing rsa
+az aks create --resource-group ${RESOURCE_GROUP} \
+              --name ${AKS_CLUSTER} \
+              --enable-managed-identity \
+              --ssh-key-value /Users/michaljirman/.ssh/id_rsa.pub \
+              --node-count 1 \
+              --enable-cluster-autoscaler \
+              --min-count 1 \
+              --max-count 5 
+
 # Configure Credentials
 az aks get-credentials --name ${AKS_CLUSTER}  --resource-group ${RESOURCE_GROUP} 
 
